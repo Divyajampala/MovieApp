@@ -15,12 +15,14 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "API_BASE", '"https://jsonplaceholder.typicode.com"'
+            buildConfigField "String", "API_BASE", '"https://api.themoviedb.org"'
+            buildConfigField "String", "API_KEY", '"0e7274f05c36db12cbe71d9ab0393d47"'
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_BASE", '""'
+            buildConfigField "String", "API_BASE", '"https://api.themoviedb.org"'
+            buildConfigField "String", "API_KEY", '"0e7274f05c36db12cbe71d9ab0393d47"'
         }
     }
     dataBinding {

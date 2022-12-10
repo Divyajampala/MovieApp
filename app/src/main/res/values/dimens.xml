@@ -9,4 +9,10 @@
     <dimen name="dimens_20dp">20dp</dimen>
     <dimen name="dimens_20sp">20sp</dimen>
     <dimen name="dimens_40dp">40dp</dimen>
+    <dimen name="dimens0dp">0dp</dimen>
+    <dimen name="dimen10">10dp</dimen>
+    <dimen name="dimen18dp">18dp</dimen>
+    <dimen name="dimen16sp">16sp</dimen>
+    <dimen name="dimens1dp">1dp</dimen>
+    <dimen name="dimen_5dp">5dp</dimen>
 </resources>

@@ -3,5 +3,6 @@
     <string name="cannot_connect_to_internet">Could not connect to the internet</string>
     <string name="something_went_wrong">OOPS!! Something went wrong..</string>
     <string name="dummy_title">which Album you want to hear</string>
+    <string name="genre">Genre</string>
 
 </resources>
