@@ -1,6 +1,7 @@
 package com.movie.dependencies
 
 import com.movie.MovieActivity
+import com.movie.view.MovieListFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -14,5 +15,6 @@ import javax.inject.Singleton
 )
 interface CoreComponent {
 
-    fun inject(movieActivity :  MovieActivity)
+    fun inject(movieActivity: MovieActivity)
+    fun inject(movieListFragment: MovieListFragment)
 }
