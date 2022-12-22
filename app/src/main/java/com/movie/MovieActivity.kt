@@ -1,13 +1,11 @@
 package com.movie
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.movie.adapter.GenreAdapter
+import com.movie.adapter.DashBoardViewPagerAdapter
 import com.movie.databinding.ActivityMovieBinding
-import com.movie.model.Movie
 import com.movie.viewModel.MovieViewModel
 import com.movie.viewModel.MovieViewModelFactory
 import javax.inject.Inject
@@ -25,28 +23,15 @@ class MovieActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie)
         (application as App).coreComponent.inject(this)
-        initViewModel()
-        initObservers()
-        movieViewModel.fetchMovieList()
-    }
-
-    private fun initViewModel() {
-        movieViewModel = ViewModelProviders.of(this, movieViewModelFactory)
-            .get(MovieViewModel::class.java)
-    }
-
-    private fun initObservers() {
-        movieViewModel.movieListResponse.observe(this, Observer { response ->
-            handleResponse(response)
-        })
-    }
-
-    private fun handleResponse(movie: Movie?) {
-        mainBinding.rvGenreList.adapter = movie?.genres?.let { GenreAdapter(it) }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        movieViewModel.clearObservables()
+        mainBinding.dashBoardFragmentCardViewPager.setAdapter(
+            DashBoardViewPagerAdapter(
+                supportFragmentManager
+            )
+        )
+        mainBinding.iconsTab.setupWithViewPager(mainBinding.dashBoardFragmentCardViewPager)
+        mainBinding.iconsTab.setTabTextColors(
+            Color.parseColor("#59b095"),
+            Color.parseColor("#EF2020")
+        );
     }
 }

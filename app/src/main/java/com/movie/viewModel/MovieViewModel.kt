@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.movie.BuildConfig
 import com.movie.model.Movie
 import com.movie.services.APIService
+import com.movie.services.MovieCategory
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -17,8 +18,11 @@ class MovieViewModel(var apiService: APIService) : RxjavaViewModel() {
 
     val movieListResponse = MutableLiveData<Movie>()
 
-    fun fetchMovieList() {
-        apiService.getMovieList(BuildConfig.API_KEY)
+    fun fetchMovieList(
+        page: Int,
+        category: MovieCategory
+    ) {
+        apiService.getMovieList(category.toString(), BuildConfig.API_KEY, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<Movie> {

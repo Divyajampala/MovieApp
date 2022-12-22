@@ -16,15 +16,16 @@ interface APIService {
 
     @GET("/3/movie/{category}")
     fun getMovieList(
-        @Query("api_key") api_key: String, @Query("page") page: String,
-        @Path("movie_id") movie_id: String
+        @Path("category") category: String,
+        @Query("api_key") api_key: String, @Query("page") page: Int,
+
     ): Single<Movie>
 
 }
 
-enum class MovieCategory {
-    now_playing,
-    popular,
-    top_rated,
-    upcoming
+enum class MovieCategory(val title: String) {
+    now_playing("Now playing"),
+    popular("Popular"),
+    top_rated("Top Rated"),
+    upcoming("Upcoming")
 }
