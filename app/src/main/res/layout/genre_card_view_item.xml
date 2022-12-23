@@ -7,8 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dimen10"
+        android:textColor="@android:color/black"
         android:background="@drawable/grey_border_green_white_background_selector"
-        android:padding="@dimen/dimen_5dp"
-        android:textSize="@dimen/dimen16sp" />
+        android:paddingHorizontal="@dimen/dimen10"
+        android:paddingVertical="@dimen/dimens3dp"
+        android:textSize="@dimen/dimen10" />
 
 </layout>

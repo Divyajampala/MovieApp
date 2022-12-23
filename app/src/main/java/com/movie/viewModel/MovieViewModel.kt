@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.movie.BuildConfig
 import com.movie.model.Movie
+import com.movie.model.MovieList
 import com.movie.services.APIService
 import com.movie.services.MovieCategory
 import io.reactivex.SingleObserver
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 class MovieViewModel(var apiService: APIService) : RxjavaViewModel() {
 
-    val movieListResponse = MutableLiveData<Movie>()
+    val movieListResponse = MutableLiveData<MovieList>()
 
     fun fetchMovieList(
         page: Int,
@@ -25,11 +26,11 @@ class MovieViewModel(var apiService: APIService) : RxjavaViewModel() {
         apiService.getMovieList(category.toString(), BuildConfig.API_KEY, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Movie> {
+            .subscribe(object : SingleObserver<MovieList> {
                 override fun onSubscribe(d: Disposable) {
                 }
 
-                override fun onSuccess(t: Movie) {
+                override fun onSuccess(t: MovieList) {
                     movieListResponse.postValue(t)
                 }
 

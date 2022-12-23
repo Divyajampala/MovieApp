@@ -1,6 +1,7 @@
 package com.movie.services
 
 import com.movie.model.Movie
+import com.movie.model.MovieList
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,9 +19,7 @@ interface APIService {
     fun getMovieList(
         @Path("category") category: String,
         @Query("api_key") api_key: String, @Query("page") page: Int,
-
-    ): Single<Movie>
-
+        ): Single<MovieList>
 }
 
 enum class MovieCategory(val title: String) {

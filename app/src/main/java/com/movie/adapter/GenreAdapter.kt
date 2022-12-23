@@ -5,9 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.databinding.DataBindingUtil
 import com.movie.databinding.GenreCardViewItemBinding
-import com.movie.model.Genre
 
-class GenreAdapter(var genreList: List<Genre>) :
+class GenreAdapter(var genreList: List<String>) :
     RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 
     inner class GenreViewHolder(var item: GenreCardViewItemBinding) :
@@ -25,7 +24,7 @@ class GenreAdapter(var genreList: List<Genre>) :
     }
 
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
-        genreList.get(position).name.also { holder.item.genre.text = it }
+        genreList.get(position).also { holder.item.genre.text = it }
     }
 
     override fun getItemCount(): Int {

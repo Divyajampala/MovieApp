@@ -1,10 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="movie"
+            type="com.movie.model.Result" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen5"
+        app:cardCornerRadius="@dimen/dimen10">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                imageUrl="@{movie.poster_path}"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:scaleType="fitXY" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen10"
+                android:layout_weight="2">
+
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{movie.title}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimens_20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="The Golden Ring" />
+
+                <TextView
+                    android:id="@+id/original_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Original Title: `+movie.original_title}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title"
+                    tools:text="Original Name: WaterFlower" />
+
+                <TextView
+                    android:id="@+id/original_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Original L/n: `+movie.original_language}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    tools:text="Original Language: en" />
+
+                <TextView
+                    android:id="@+id/release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen5"
+                    android:drawableStart="@drawable/ic_baseline_circle_24"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:text="@{movie.release_date.substring(0,4)}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toEndOf="@+id/original_language"
+                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    tools:text="2022" />
+
+
+                <TextView
+                    android:id="@+id/adult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen10"
+                    android:text="@{movie.adult? `18+` : `13+`}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/release_date"
+                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    tools:text="18+" />
+
+                <TextView
+                    android:id="@+id/popularity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen10"
+                    android:drawableStart="@drawable/ic_baseline_circle_24"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:text="@{movie.popularity.toString()}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toEndOf="@+id/vote_count"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    tools:text="1866.4" />
+
+                <TextView
+                    android:id="@+id/vote_average"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_stars_24"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:drawableTint="@color/colorPrimaryDark"
+                    android:text="@{movie.vote_average.toString()+`/10`}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    tools:text="120/10" />
+
+                <TextView
+                    android:id="@+id/vote_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen10"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toEndOf="@id/vote_average"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    app:voteCount="@{movie.vote_count.toString()}"
+                    tools:text="2904K Votes" />
+
+                <TextView
+                    android:id="@+id/overView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="@{movie.overview}"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_genreList"
+                    tools:text=";jk;kcm; ;lvk;xkv;k k;lfks;laka;lkv;lk ;lk ;l;lks;lkv;k ;lk k;lcks;lck;kc;sck;scks;lk;skv;k  k;sks;k;svkv;lkv;lskv ;lks;lvk;lvk ljl jcclj  lkjc;ck;k;k;lxkc;kksc;cj  hrooll ll llll " />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_genreList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimens3dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vote_average"
+                    tools:itemCount="2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
