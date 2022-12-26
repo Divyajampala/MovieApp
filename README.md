@@ -1,6 +1,6 @@
-# MetFlix
+## MetFlix
 
-#Overview
+# Overview
 
 Thank you for your interest in joining the Golden Equator tech team. You have been
 shortlisted for the first phase of our hiring process. Please complete the following exercise.
