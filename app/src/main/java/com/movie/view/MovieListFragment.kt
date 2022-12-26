@@ -9,12 +9,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.movie.App
 import com.movie.R
 import com.movie.adapter.MovieAdapter
 import com.movie.databinding.FragmentMovieListBinding
 import com.movie.model.Genre
 import com.movie.model.MovieList
+import com.movie.model.Result
 import com.movie.services.MovieCategory
 import com.movie.viewModel.MovieViewModel
 import com.movie.viewModel.MovieViewModelFactory
@@ -26,8 +29,12 @@ import javax.inject.Inject
 class MovieListFragment() : Fragment() {
 
     lateinit private var genreList: List<Genre>
+    lateinit private var category: MovieCategory
     private lateinit var mDataBinding: FragmentMovieListBinding
     lateinit var movieViewModel: MovieViewModel
+    protected var isLastPage = false
+    protected var currentPage = 1
+    protected var isLoading = false
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
@@ -47,19 +54,27 @@ class MovieListFragment() : Fragment() {
             inflater,
             R.layout.fragment_movie_list, container, false
         )
+        initView()
         initViewModel()
         initObservers()
         movieViewModel.getGenreList()
         return mDataBinding?.getRoot()
     }
 
-    private fun handleResponse(movie: MovieList) {
-        mDataBinding.rvMovieList.adapter = movie?.results?.let {
-            MovieAdapter(it,genreList) { id ->
+    private fun initView() {
+        mDataBinding.rvMovieList.adapter =
+            MovieAdapter(onClick = { id ->
                 var intent = Intent(activity, MovieDetailedActivity::class.java)
                 intent.putExtra(MOVIE_ID, id)
                 startActivity(intent)
-            }
+            })
+        mDataBinding?.rvMovieList?.addOnScrollListener(recyclerViewOnScrollListener);
+    }
+
+    private fun handleResponse(movie: List<Result>) {
+        (mDataBinding.rvMovieList.adapter as MovieAdapter).apply {
+            this.movieList.addAll(movie)
+            notifyDataSetChanged()
         }
     }
 
@@ -81,23 +96,59 @@ class MovieListFragment() : Fragment() {
     }
 
     private fun initObservers() {
-        activity?.let {
-            movieViewModel.movieListResponse.observe(it, Observer { response ->
-                handleResponse(response)
-            })
-        }
+        movieViewModel.movieListResponse.observe(viewLifecycleOwner, Observer { response ->
+            setResponseData(response)
+        })
 
-        activity?.let {
-            movieViewModel.genreResponse.observe(it, Observer { response ->
-                val category = arguments?.getSerializable(CATEGORY) as MovieCategory
+        movieViewModel.genreResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isNullOrEmpty().not()) {
+                category = arguments?.getSerializable(CATEGORY) as MovieCategory
                 genreList = response
                 movieViewModel.fetchMovieList(1, category)
-            })
-        }
+            }
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         movieViewModel.clearObservables()
     }
+
+    fun setResponseData(response: MovieList) {
+        if (response.results == null
+            || currentPage == response.total_pages
+        ) {
+            isLastPage = true
+        }
+        isLoading = false
+        response.results?.let { handleResponse(it) }
+    }
+
+    /***
+     * Method for pagination while scroll list
+     * **/
+    private var recyclerViewOnScrollListener: RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                mDataBinding?.rvMovieList?.layoutManager?.let { layoutManager ->
+                    var visibleCount: Int = layoutManager.getChildCount();
+                    var totalItemCount: Int = layoutManager.getItemCount();
+                    var firstVisibleItemPosition: Int =
+                        (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition();
+
+                    if (!isLoading && !isLastPage
+                        && ((visibleCount + firstVisibleItemPosition) >= totalItemCount
+                                && firstVisibleItemPosition >= 0)
+                    ) {
+                        isLoading = true;
+                        movieViewModel.fetchMovieList(++currentPage, category)
+                    }
+
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            }
+        }
 }

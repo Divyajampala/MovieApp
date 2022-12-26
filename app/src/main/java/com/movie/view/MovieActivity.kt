@@ -1,9 +1,11 @@
-package com.movie
+package com.movie.view
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import com.movie.App
+import com.movie.R
 import com.movie.adapter.DashBoardViewPagerAdapter
 import com.movie.databinding.ActivityMovieBinding
 import com.movie.viewModel.MovieViewModel

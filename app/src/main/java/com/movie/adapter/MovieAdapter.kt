@@ -9,8 +9,8 @@ import com.movie.model.Genre
 import com.movie.model.Result
 
 class MovieAdapter(
-    var movieList: List<Result>,
-    var genreList: List<Genre>,
+    var movieList: ArrayList<Result> = ArrayList(),
+    var genreList: List<Genre> = ArrayList(),
     var onClick: (id: Int) -> Unit
 ) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -30,15 +30,17 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        movieList.get(position).let {
-            holder.item.movie = it
-            holder.item.rvGenreList.adapter = it.genre_ids?.flatMap { genreIds ->
-                genreList.filter { genreIds == it.id }
-            }?.mapNotNull { genre -> genre.name }
-                ?.let { list -> GenreAdapter(list) }
-        }
-        holder.item.movieCardItem.setOnClickListener {
-            movieList.get(position).id?.let { id -> onClick.invoke(id) }
+        holder.item.apply {
+            movieList.get(position)?.let { movie ->
+                this.movie = movie
+                rvGenreList.adapter = movie.genre_ids?.flatMap { genreIds ->
+                    genreList.filter { genreIds == it.id }
+                }?.mapNotNull { genre -> genre.name }
+                    ?.let { list -> GenreAdapter(list) }
+                movieCardItem.setOnClickListener {
+                    movie.id?.let { id -> onClick.invoke(id) }
+                }
+            }
         }
     }
 
