@@ -36,14 +36,20 @@ class MovieViewModel(
     val loadingState = MutableLiveData<NetworkState>()
     val favMovieState = MutableLiveData<Boolean>()
 
-    fun getObjectFromString(jsonString: String): List<Genre> {
+    /**
+     * Converts String to Object
+     */
+    private fun getObjectFromString(jsonString: String): List<Genre> {
         val turnsType = object : TypeToken<List<Genre>>() {}.type
         val list = Gson().fromJson<List<Genre>>(jsonString, turnsType)
         return list;
 
     }
 
-    fun stringFromObject(list: List<Genre>): String? {
+    /**
+     * Converts Object to String
+     */
+    private fun stringFromObject(list: List<Genre>): String? {
         val gson = Gson()
         return gson.toJson(list)
     }
@@ -59,12 +65,18 @@ class MovieViewModel(
         }
     }
 
+    /**
+     * check Movie Fav status.
+     */
     fun checkFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             favMovieState.postValue(favMovieCacheDao.exists(id))
         }
     }
 
+    /**
+     * Search Movies.
+     */
     fun getSearchResultFromApi(query: String, page: Int) {
         loadingState.postValue(NetworkState.LOADING)
         apiService.getMovieListBySearch(query, BuildConfig.API_KEY, page)
@@ -86,18 +98,27 @@ class MovieViewModel(
             })
     }
 
+    /**
+     * set Movie Status as Fav
+     */
     fun setFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             favMovieCacheDao.insert(FavMovie(id))
         }
     }
 
+    /**
+     * un-set Movie Status as Fav
+     */
     fun unsetFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             favMovieCacheDao.delete(FavMovie(id))
         }
     }
 
+    /**
+     * fetch Movies based on Category.
+     */
     fun fetchMovieList(
         page: Int,
         category: MovieCategory
@@ -122,6 +143,9 @@ class MovieViewModel(
             })
     }
 
+    /**
+     * fetch movie details.
+     */
     fun getMovieDetails(id: Int) {
         loadingState.postValue(NetworkState.LOADING)
         apiService.getMovieDetails(id, BuildConfig.API_KEY)
@@ -143,6 +167,9 @@ class MovieViewModel(
             })
     }
 
+    /**
+     * fetch Genre mapping with id.
+     */
     fun getGenreDetails() {
         apiService.getGenreList(BuildConfig.API_KEY)
             .subscribeOn(Schedulers.io())
