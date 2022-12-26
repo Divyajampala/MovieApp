@@ -24,6 +24,7 @@
         </activity>
 
         <activity android:name="com.movie.view.MovieDetailedActivity" />
+        <activity android:name="com.movie.view.SearchActivity" />
     </application>
 
 </manifest>

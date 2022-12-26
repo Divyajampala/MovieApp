@@ -1,6 +1,8 @@
 package com.movie.view
 
 import android.text.TextUtils
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -26,12 +28,14 @@ fun loadMovieImage(imageView: ImageView, url: String?) {
 
 @BindingAdapter("releaseDate")
 fun TextView.releaseDate(dateString: String?) {
+    this.visibility = GONE
     if (!TextUtils.isEmpty(dateString)) {
         var formatter = SimpleDateFormat("yyyy-MM-dd")
         try {
             val date = (formatter as DateFormat).parse(dateString)
-            formatter = SimpleDateFormat("(dd/mm/yyyy")
-            text = "Release Date" + formatter.format(date)
+            formatter = SimpleDateFormat("dd/mm/yyyy")
+            text = context.getString(R.string.release_date) + formatter.format(date)
+            this.visibility = VISIBLE
         } catch (e: ParseException) {
             e.printStackTrace()
         }

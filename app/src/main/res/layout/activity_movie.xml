@@ -7,6 +7,22 @@
         android:layout_height="match_parent"
         android:padding="@dimen/dimens20dp">
 
+        <TextView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:padding="@dimen/dimen10"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_search_black_24dp"
+            android:background="@drawable/green_rounded_corners_white_background"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:inputType="text"
+            android:textCursorDrawable="@drawable/cursor_drawable_green"
+            app:iconifiedByDefault="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/search_for"
+            app:searchIcon="@drawable/ic_search_black_24dp"/>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/dash_board_fragment_card_view_pager"
             android:layout_width="match_parent"
@@ -24,7 +40,9 @@
             android:elevation="@dimen/dimen20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tabGravity="center" />
+            app:tabGravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="@color/colorAccent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

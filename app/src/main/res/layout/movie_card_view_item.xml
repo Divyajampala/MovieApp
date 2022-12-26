@@ -74,14 +74,11 @@
                     android:id="@+id/release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dimen5"
-                    android:drawableStart="@drawable/ic_baseline_circle_24"
-                    android:drawablePadding="@dimen/dimen5"
-                    android:text="@{movie.release_date.substring(0,4)}"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
-                    app:layout_constraintStart_toEndOf="@+id/original_language"
-                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/original_language"
+                    app:releaseDate="@{movie.release_date}"
                     tools:text="2022" />
 
 
@@ -89,12 +86,14 @@
                     android:id="@+id/adult"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:drawableStart="@drawable/ic_baseline_circle_24"
                     android:layout_marginStart="@dimen/dimen10"
                     android:text="@{movie.adult? `18+` : `13+`}"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/release_date"
+                    app:layout_constraintStart_toEndOf="@+id/original_language"
                     app:layout_constraintTop_toBottomOf="@+id/original_title"
                     tools:text="18+" />
 

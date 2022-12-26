@@ -5,5 +5,7 @@
     <string name="dummy_title">which Album you want to hear</string>
     <string name="genre">Genre</string>
     <string name="no_movie_available">No Movie Available</string>
+    <string name="search_for">Search</string>
+    <string name="release_date">Release Date: </string>
 
 </resources>

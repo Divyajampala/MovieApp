@@ -66,6 +66,27 @@ class MovieViewModel(
         }
     }
 
+    fun getSearchResultFromApi(query: String, page: Int) {
+        loadingState.postValue(NetworkState.LOADING)
+        apiService.getMovieListBySearch(query, BuildConfig.API_KEY, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<MovieList> {
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onSuccess(t: MovieList) {
+                    loadingState.postValue(NetworkState.SUCCESS)
+                    movieListResponse.postValue(t)
+                }
+
+                override fun onError(e: Throwable) {
+                    loadingState.postValue(NetworkState.ERROR)
+                }
+
+            })
+    }
+
     fun setFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             favMovieCacheDao.insert(FavMovieCache(id))

@@ -86,4 +86,8 @@ dependencies {
     api room.roomKtx
     kapt room.roomkapt
 
+    //navigation
+    api navigation.navigationFragmetKtx
+    api navigation.rnavigationUiKtx
+
 }

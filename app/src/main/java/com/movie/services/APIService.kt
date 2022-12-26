@@ -26,6 +26,12 @@ interface APIService {
         @Path("category") category: String,
         @Query("api_key") api_key: String, @Query("page") page: Int,
     ): Single<MovieList>
+
+    @GET("/3/search/movie")
+    fun getMovieListBySearch(
+        @Query("query") query: String,
+        @Query("api_key") api_key: String, @Query("page") page: Int,
+    ): Single<MovieList>
 }
 
 enum class MovieCategory(val title: String) {

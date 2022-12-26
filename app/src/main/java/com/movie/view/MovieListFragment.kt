@@ -27,14 +27,14 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class MovieListFragment() : Fragment() {
+open class MovieListFragment() : Fragment() {
 
     lateinit private var genreList: List<Genre>
-    lateinit private var category: MovieCategory
-    private lateinit var mDataBinding: FragmentMovieListBinding
+    private var category: MovieCategory? = null
+    protected lateinit var mDataBinding: FragmentMovieListBinding
     lateinit var movieViewModel: MovieViewModel
     protected var isLastPage = false
-    protected var currentPage = 1
+    protected var currentPage = 0
     protected var isLoading = false
 
     @Inject
@@ -58,23 +58,27 @@ class MovieListFragment() : Fragment() {
         initView()
         initViewModel()
         initObservers()
+        category = arguments?.getSerializable(CATEGORY) as MovieCategory?
         movieViewModel.getGenreList()
         return mDataBinding?.getRoot()
     }
 
-    private fun initView() {
+    open fun initView() {
         mDataBinding.rvMovieList.adapter =
             MovieAdapter(onClick = { id ->
                 var intent = Intent(activity, MovieDetailedActivity::class.java)
                 intent.putExtra(MOVIE_ID, id)
                 startActivity(intent)
             })
-        mDataBinding?.rvMovieList?.addOnScrollListener(recyclerViewOnScrollListener);
+        mDataBinding?.rvMovieList?.addOnScrollListener(recyclerViewOnScrollListener)
     }
 
     private fun handleResponse(movie: List<Result>) {
         (mDataBinding.rvMovieList.adapter as MovieAdapter).apply {
             this.movieList.addAll(movie)
+            if (movieList.size == 0) {
+                mDataBinding.tvMessage.visibility = View.VISIBLE
+            }
             notifyDataSetChanged()
         }
     }
@@ -103,9 +107,9 @@ class MovieListFragment() : Fragment() {
 
         movieViewModel.genreResponse.observe(viewLifecycleOwner, Observer { response ->
             if (response.isNullOrEmpty().not()) {
-                category = arguments?.getSerializable(CATEGORY) as MovieCategory
                 genreList = response
-                movieViewModel.fetchMovieList(1, category)
+                // Fetch Movie List
+                fetchMovieList()
             }
         })
 
@@ -113,7 +117,6 @@ class MovieListFragment() : Fragment() {
             when (response) {
                 NetworkState.SUCCESS -> {
                     hideProgressBar()
-                    mDataBinding.tvMessage.visibility = View.GONE
                 }
                 NetworkState.ERROR -> {
                     hideProgressBar()
@@ -125,6 +128,10 @@ class MovieListFragment() : Fragment() {
                 }
             }
         })
+    }
+
+    open fun fetchMovieList() {
+        category?.let { category -> movieViewModel.fetchMovieList(++currentPage, category) }
     }
 
     override fun onDestroy() {
@@ -159,8 +166,8 @@ class MovieListFragment() : Fragment() {
                         && ((visibleCount + firstVisibleItemPosition) >= totalItemCount
                                 && firstVisibleItemPosition >= 0)
                     ) {
-                        isLoading = true;
-                        movieViewModel.fetchMovieList(++currentPage, category)
+                        isLoading = true
+                        fetchMovieList()
                     }
 
                 }
@@ -171,7 +178,7 @@ class MovieListFragment() : Fragment() {
         }
 
     fun hideProgressBar() {
-        mDataBinding.progressBar.visibility = View.GONE
+        mDataBinding.progressBar.visibility = View.INVISIBLE
     }
 
     fun showProgressBar() {
