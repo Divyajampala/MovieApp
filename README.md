@@ -16,7 +16,6 @@ Challenge Instructions (Android Developer)
    Pass the API Key to all the APIs by adding {api_key} parameter to each end-point
    Example
    https://api.themoviedb.org/3/movie/550?api_key=0e7274f05c36db12cbe71d9ab0393d47
-   Screens
    
 #  Home Page
    The user is expected to land on this page every time the app is opened. Home page consists
