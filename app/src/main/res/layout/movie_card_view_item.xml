@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{movie.title}"
                     android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/dimens_20sp"
+                    android:textSize="@dimen/dimens20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="The Golden Ring" />

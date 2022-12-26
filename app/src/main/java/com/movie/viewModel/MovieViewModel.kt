@@ -78,6 +78,7 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
     }
 
     fun getMovieDetails(id: Int) {
+        loadingState.postValue(NetworkState.LOADING)
         apiService.getMovieDetails(id, BuildConfig.API_KEY)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -87,9 +88,11 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
 
                 override fun onSuccess(t: Movie) {
                     movieDetailsResponse.postValue(t)
+                    loadingState.postValue(NetworkState.SUCCESS)
                 }
 
                 override fun onError(e: Throwable) {
+                    loadingState.postValue(NetworkState.ERROR)
                 }
 
             })
@@ -101,7 +104,6 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<GenreResponse> {
                 override fun onSubscribe(d: Disposable) {
-                    Log.d("", "")
                 }
 
                 override fun onSuccess(t: GenreResponse) {
@@ -112,7 +114,6 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d("", "")
                 }
 
             })

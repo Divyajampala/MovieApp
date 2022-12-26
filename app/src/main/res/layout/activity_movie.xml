@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/dimens_20dp">
+        android:padding="@dimen/dimens20dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/dash_board_fragment_card_view_pager"
