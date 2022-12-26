@@ -1,5 +1,6 @@
 package com.movie.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.movie.App
 import com.movie.R
 import com.movie.adapter.MovieAdapter
 import com.movie.databinding.FragmentMovieListBinding
+import com.movie.model.Genre
 import com.movie.model.MovieList
 import com.movie.services.MovieCategory
 import com.movie.viewModel.MovieViewModel
@@ -23,6 +25,7 @@ import javax.inject.Inject
  */
 class MovieListFragment() : Fragment() {
 
+    lateinit private var genreList: List<Genre>
     private lateinit var mDataBinding: FragmentMovieListBinding
     lateinit var movieViewModel: MovieViewModel
 
@@ -46,17 +49,23 @@ class MovieListFragment() : Fragment() {
         )
         initViewModel()
         initObservers()
-        val category = arguments?.getSerializable(CATEGORY) as MovieCategory
-        movieViewModel.fetchMovieList(1, category)
+        movieViewModel.getGenreList()
         return mDataBinding?.getRoot()
     }
 
     private fun handleResponse(movie: MovieList) {
-        mDataBinding.rvMovieList.adapter = movie?.results?.let { MovieAdapter(it) }
+        mDataBinding.rvMovieList.adapter = movie?.results?.let {
+            MovieAdapter(it,genreList) { id ->
+                var intent = Intent(activity, MovieDetailedActivity::class.java)
+                intent.putExtra(MOVIE_ID, id)
+                startActivity(intent)
+            }
+        }
     }
 
     companion object {
-        const val CATEGORY = "CATEGORY";
+        private const val CATEGORY = "CATEGORY";
+        const val MOVIE_ID = "MOVIE_ID";
         fun getInstance(category: MovieCategory): MovieListFragment {
             val fragment = MovieListFragment()
             val args = Bundle()
@@ -75,6 +84,14 @@ class MovieListFragment() : Fragment() {
         activity?.let {
             movieViewModel.movieListResponse.observe(it, Observer { response ->
                 handleResponse(response)
+            })
+        }
+
+        activity?.let {
+            movieViewModel.genreResponse.observe(it, Observer { response ->
+                val category = arguments?.getSerializable(CATEGORY) as MovieCategory
+                genreList = response
+                movieViewModel.fetchMovieList(1, category)
             })
         }
     }

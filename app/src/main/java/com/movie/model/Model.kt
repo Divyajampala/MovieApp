@@ -33,6 +33,10 @@ data class Genre(
     val name: String?
 )
 
+data class GenreResponse(
+    val genres: List<Genre>?
+)
+
 data class ProductionCompany(
     val id: Int?,
     val logo_path: String?,
@@ -85,3 +89,9 @@ data class Result(
     val vote_average: Double?,
     val vote_count: Int?
 )
+
+enum class NetworkState {
+    ERROR,
+    LOADING,
+    SUCCESS
+}

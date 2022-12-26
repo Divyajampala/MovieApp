@@ -81,4 +81,9 @@ dependencies {
     api rx.android
     api rx.kotlin
 
+    //room
+    api room.roomRuntime
+    api room.roomKtx
+    kapt room.roomkapt
+
 }
