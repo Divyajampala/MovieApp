@@ -7,34 +7,39 @@
 
         <variable
             name="movie"
-            type="com.movie.model.Result" />
-
+            type="com.movie.model.Movie" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/movieCardItem"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen5"
-        app:cardCornerRadius="@dimen/dimen10">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <!--        val belongs_to_collection: Any?,-->
+        <!--        val budget: Int?,-->
+        <!--        val homepage: String?,-->
+        <!--        val imdb_id: String?,-->
+        <!--        val production_companies: List<ProductionCompany>?,-->
+        <!--        val production_countries: List<ProductionCountry>?,-->
+        <!--        val revenue: Int?,-->
+        <!--        val spoken_languages: List<SpokenLanguage>?,-->
+        <!--        val video: Boolean?,-->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/moviePoster"
                 imageUrl="@{movie.poster_path}"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:scaleType="fitXY" />
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimens600dp"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/dimen10"
-                android:layout_weight="2">
+                app:layout_constraintTop_toBottomOf="@+id/moviePoster">
 
 
                 <TextView
@@ -72,30 +77,55 @@
 
                 <TextView
                     android:id="@+id/release_date"
+                    releaseDate="@{movie.release_date}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dimen5"
-                    android:drawableStart="@drawable/ic_baseline_circle_24"
-                    android:drawablePadding="@dimen/dimen5"
-                    android:text="@{movie.release_date.substring(0,4)}"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
-                    app:layout_constraintStart_toEndOf="@+id/original_language"
-                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/original_language"
                     tools:text="2022" />
 
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:text="@{movie.status}"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    tools:text="Released" />
+
+                <TextView
+                    android:id="@+id/time"
+                    runtime="@{movie.runtime}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen10"
+                    android:drawableStart="@drawable/ic_baseline_circle_24"
+                    android:drawablePadding="@dimen/dimen5"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/dimen12sp"
+                    app:layout_constraintStart_toEndOf="@+id/status"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    tools:text="1h 56 min" />
 
                 <TextView
                     android:id="@+id/adult"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen10"
+                    android:drawableStart="@drawable/ic_baseline_circle_24"
+                    android:drawablePadding="@dimen/dimen5"
                     android:text="@{movie.adult? `18+` : `13+`}"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/release_date"
-                    app:layout_constraintTop_toBottomOf="@+id/original_title"
+                    app:layout_constraintStart_toEndOf="@+id/time"
+                    app:layout_constraintTop_toBottomOf="@+id/release_date"
                     tools:text="18+" />
 
                 <TextView
@@ -109,7 +139,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
                     app:layout_constraintStart_toEndOf="@+id/vote_count"
-                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    app:layout_constraintTop_toBottomOf="@+id/status"
                     tools:text="1866.4" />
 
                 <TextView
@@ -123,7 +153,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    app:layout_constraintTop_toBottomOf="@+id/status"
                     tools:text="120/10" />
 
                 <TextView
@@ -134,20 +164,30 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/dimen12sp"
                     app:layout_constraintStart_toEndOf="@id/vote_average"
-                    app:layout_constraintTop_toBottomOf="@+id/release_date"
+                    app:layout_constraintTop_toBottomOf="@+id/status"
                     app:voteCount="@{movie.vote_count.toString()}"
                     tools:text="2904K Votes" />
 
                 <TextView
-                    android:id="@+id/overView"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tagLine"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="3"
-                    android:text="@{movie.overview}"
+                    android:text="@{`Tagline: `+movie.tagline}"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rv_genreList"
+                    tools:text=";l;lks;lkv;k ;lk k;lcks;lck;kc;sck;scks;lk;skv;k  k;sks;k;svkv;lkv;lskv ;lks;lvk;lvk ljl jcclj  lkjc;ck;k;k;lxkc;kksc;cj  hrooll ll llll " />
+
+                <TextView
+                    android:id="@+id/overView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@{movie.overview}"
+                    android:textColor="@android:color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tagLine"
                     tools:text=";jk;kcm; ;lvk;xkv;k k;lfks;laka;lkv;lk ;lk ;l;lks;lkv;k ;lk k;lcks;lck;kc;sck;scks;lk;skv;k  k;sks;k;svkv;lkv;lskv ;lks;lvk;lvk ljl jcclj  lkjc;ck;k;k;lxkc;kksc;cj  hrooll ll llll " />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -164,6 +204,7 @@
                     tools:itemCount="2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

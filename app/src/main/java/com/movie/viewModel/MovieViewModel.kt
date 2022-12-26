@@ -57,7 +57,7 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
         page: Int,
         category: MovieCategory
     ) {
-
+        loadingState.postValue(NetworkState.LOADING)
         apiService.getMovieList(category.toString(), BuildConfig.API_KEY, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -67,6 +67,7 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
 
                 override fun onSuccess(t: MovieList) {
                     movieListResponse.postValue(t)
+                    loadingState.postValue(NetworkState.SUCCESS)
                 }
 
                 override fun onError(e: Throwable) {

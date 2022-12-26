@@ -15,4 +15,10 @@
     <dimen name="dimen16sp">16sp</dimen>
     <dimen name="dimens1dp">1dp</dimen>
     <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen20">20dp</dimen>
+    <dimen name="dimen5">5dp</dimen>
+    <dimen name="dimen24sp">24sp</dimen>
+    <dimen name="dimen12sp">12sp</dimen>
+    <dimen name="dimens3dp">3dp</dimen>
+    <dimen name="dimens600dp">600dp</dimen>
 </resources>

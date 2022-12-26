@@ -17,6 +17,7 @@ import com.movie.adapter.MovieAdapter
 import com.movie.databinding.FragmentMovieListBinding
 import com.movie.model.Genre
 import com.movie.model.MovieList
+import com.movie.model.NetworkState
 import com.movie.model.Result
 import com.movie.services.MovieCategory
 import com.movie.viewModel.MovieViewModel
@@ -107,6 +108,23 @@ class MovieListFragment() : Fragment() {
                 movieViewModel.fetchMovieList(1, category)
             }
         })
+
+        movieViewModel.loadingState.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                NetworkState.SUCCESS -> {
+                    hideProgressBar()
+                    mDataBinding.tvMessage.visibility = View.GONE
+                }
+                NetworkState.ERROR -> {
+                    hideProgressBar()
+                    mDataBinding.tvMessage.visibility = View.VISIBLE
+                }
+                NetworkState.LOADING -> {
+                    mDataBinding.tvMessage.visibility = View.GONE
+                    showProgressBar()
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -151,4 +169,12 @@ class MovieListFragment() : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             }
         }
+
+    fun hideProgressBar() {
+        mDataBinding.progressBar.visibility = View.GONE
+    }
+
+    fun showProgressBar() {
+        mDataBinding.progressBar.visibility = View.VISIBLE
+    }
 }
