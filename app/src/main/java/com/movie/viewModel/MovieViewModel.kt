@@ -13,7 +13,9 @@ import com.movie.services.APIService
 import com.movie.services.MovieCategory
 import com.nmc.myapplication.db.dao.CacheDao
 import com.nmc.myapplication.db.dao.DataName
+import com.nmc.myapplication.db.dao.FavMovieDao
 import com.nmc.myapplication.db.entity.Cache
+import com.nmc.myapplication.db.entity.FavMovieCache
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,12 +25,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : RxjavaViewModel() {
+class MovieViewModel(
+    private var apiService: APIService,
+    val dao: CacheDao,
+    val favMovieCacheDao: FavMovieDao
+) : RxjavaViewModel() {
 
     val movieListResponse = MutableLiveData<MovieList>()
     val movieDetailsResponse = MutableLiveData<Movie>()
     val genreResponse = MutableLiveData<List<Genre>>()
     val loadingState = MutableLiveData<NetworkState>()
+    val favMovieState = MutableLiveData<Boolean>()
 
     fun getObjectFromString(jsonString: String): List<Genre> {
         val turnsType = object : TypeToken<List<Genre>>() {}.type
@@ -50,6 +57,24 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
             } else {
                 genreResponse.postValue(getObjectFromString(genreList))
             }
+        }
+    }
+
+    fun checkFavMovieState(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favMovieState.postValue(favMovieCacheDao.exists(id))
+        }
+    }
+
+    fun setFavMovieState(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favMovieCacheDao.insert(FavMovieCache(id))
+        }
+    }
+
+    fun unsetFavMovieState(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favMovieCacheDao.delete(FavMovieCache(id))
         }
     }
 
@@ -122,8 +147,12 @@ class MovieViewModel(private var apiService: APIService, val dao: CacheDao) : Rx
 
 
 class MovieViewModelFactory
-@Inject constructor(var apiService: APIService, val dao: CacheDao) : ViewModelProvider.Factory {
+@Inject constructor(
+    var apiService: APIService,
+    val dao: CacheDao,
+    val favMovieDao: FavMovieDao
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MovieViewModel(apiService, dao) as T
+        return MovieViewModel(apiService, dao, favMovieDao) as T
     }
 }

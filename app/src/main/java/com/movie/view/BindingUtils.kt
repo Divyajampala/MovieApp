@@ -42,7 +42,7 @@ fun TextView.releaseDate(dateString: String?) {
 fun TextView.runtime(runtime: Int?) {
     runtime?.let {
         if (runtime > 60) {
-            text = (runtime / 60).toString() + " h" + (runtime % 60).toString() + " mins"
+            text = (runtime / 60).toString() + " h " + (runtime % 60).toString() + " mins"
         } else {
             text = runtime.toString() + " mins"
         }

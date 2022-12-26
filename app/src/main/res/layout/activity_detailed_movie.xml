@@ -99,8 +99,9 @@
 
                     <ImageView
                         android:id="@+id/favIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/dimens25dp"
+                        android:layout_height="@dimen/dimens25dp"
+                        android:layout_marginTop="@dimen/dimen5"
                         android:layout_marginEnd="@dimen/dimen10"
                         android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
                         app:layout_constraintEnd_toEndOf="parent"

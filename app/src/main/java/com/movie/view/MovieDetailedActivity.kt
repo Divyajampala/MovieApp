@@ -19,6 +19,7 @@ import javax.inject.Inject
 
 class MovieDetailedActivity : AppCompatActivity() {
 
+    private var movieId: Int = -1
     private lateinit var mDataBinding: ActivityDetailedMovieBinding
 
     lateinit var movieViewModel: MovieViewModel
@@ -33,17 +34,24 @@ class MovieDetailedActivity : AppCompatActivity() {
         initView()
         initViewModel()
         initObservers()
-        movieViewModel.getMovieDetails(intent.getIntExtra(MOVIE_ID, 0))
+        movieId = intent.getIntExtra(MOVIE_ID, 0)
+        movieViewModel.getMovieDetails(movieId)
 
     }
 
     private fun initView() {
         mDataBinding.favIcon.apply {
             setOnClickListener {
-                if (drawable.constantState == resources.getDrawable(R.drawable.ic_baseline_thumb_up_24).constantState) {
-                    setImageResource(R.drawable.ic_baseline_thumb_up_off_alt_24)
+                if (drawable.constantState == resources.getDrawable(
+                        R.drawable.ic_baseline_thumb_up_24,
+                        null
+                    ).constantState
+                ) {
+                    movieViewModel.unsetFavMovieState(movieId)
+                    unsetFavIcon()
                 } else {
-                    setImageResource(R.drawable.ic_baseline_thumb_up_24)
+                    movieViewModel.setFavMovieState(movieId)
+                    setFavIcon()
                 }
             }
         }
@@ -59,25 +67,42 @@ class MovieDetailedActivity : AppCompatActivity() {
             handleResponse(response)
         })
 
+        movieViewModel.favMovieState.observe(this, Observer { response ->
+            if (response) {
+                setFavIcon()
+            } else {
+                unsetFavIcon()
+            }
+        })
+
         movieViewModel.loadingState.observe(this, Observer { response ->
             when (response) {
                 NetworkState.SUCCESS -> {
-                    hideProgressBar()
+                    hideProgressView()
+                    movieViewModel.checkFavMovieState(movieId)
                     mDataBinding.tvMessage.visibility = View.GONE
                     mDataBinding.detailsContentLayout.visibility = View.VISIBLE
                 }
                 NetworkState.ERROR -> {
-                    hideProgressBar()
+                    hideProgressView()
                     mDataBinding.tvMessage.visibility = View.VISIBLE
                     mDataBinding.detailsContentLayout.visibility = View.GONE
                 }
                 NetworkState.LOADING -> {
                     mDataBinding.tvMessage.visibility = View.GONE
                     mDataBinding.detailsContentLayout.visibility = View.GONE
-                    showProgressBar()
+                    showProgressView()
                 }
             }
         })
+    }
+
+    private fun setFavIcon() {
+        mDataBinding.favIcon.setImageResource(R.drawable.ic_baseline_thumb_up_24)
+    }
+
+    private fun unsetFavIcon() {
+        mDataBinding.favIcon.setImageResource(R.drawable.ic_baseline_thumb_up_off_alt_24)
     }
 
     private fun handleResponse(response: Movie) {
@@ -86,13 +111,11 @@ class MovieDetailedActivity : AppCompatActivity() {
             ?.let { list -> GenreAdapter(list) }
     }
 
-    fun hideProgressBar() {
+    fun hideProgressView() {
         mDataBinding.progressLayout.visibility = View.GONE
     }
 
-    fun showProgressBar() {
+    fun showProgressView() {
         mDataBinding.progressLayout.visibility = View.VISIBLE
     }
-
-
 }
