@@ -30,11 +30,18 @@ import javax.inject.Inject
 open class MovieListFragment() : Fragment() {
 
     lateinit private var genreList: List<Genre>
+
     private var category: MovieCategory? = null
+
     protected lateinit var mDataBinding: FragmentMovieListBinding
+
     lateinit var movieViewModel: MovieViewModel
+
+    //Pagination
     protected var isLastPage = false
+
     protected var currentPage = 0
+
     protected var isLoading = false
 
     @Inject
@@ -44,7 +51,6 @@ open class MovieListFragment() : Fragment() {
         super.onCreate(savedInstanceState)
         (activity?.application as App).coreComponent.inject(this)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,8 +90,11 @@ open class MovieListFragment() : Fragment() {
     }
 
     companion object {
-        private const val CATEGORY = "CATEGORY";
-        const val MOVIE_ID = "MOVIE_ID";
+
+        private const val CATEGORY = "CATEGORY"
+
+        const val MOVIE_ID = "MOVIE_ID"
+
         fun getInstance(category: MovieCategory): MovieListFragment {
             val fragment = MovieListFragment()
             val args = Bundle()
@@ -116,15 +125,15 @@ open class MovieListFragment() : Fragment() {
         movieViewModel.loadingState.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 NetworkState.SUCCESS -> {
-                    hideProgressBar()
+                    hideProgressView()
                 }
                 NetworkState.ERROR -> {
-                    hideProgressBar()
+                    hideProgressView()
                     mDataBinding.tvMessage.visibility = View.VISIBLE
                 }
                 NetworkState.LOADING -> {
                     mDataBinding.tvMessage.visibility = View.GONE
-                    showProgressBar()
+                    showProgressView()
                 }
             }
         })
@@ -177,11 +186,11 @@ open class MovieListFragment() : Fragment() {
             }
         }
 
-    fun hideProgressBar() {
+    fun hideProgressView() {
         mDataBinding.progressBar.visibility = View.INVISIBLE
     }
 
-    fun showProgressBar() {
+    fun showProgressView() {
         mDataBinding.progressBar.visibility = View.VISIBLE
     }
 }

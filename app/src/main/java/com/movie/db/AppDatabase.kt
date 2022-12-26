@@ -7,10 +7,10 @@ import androidx.room.RoomDatabase
 import com.nmc.myapplication.db.dao.CacheDao
 import com.nmc.myapplication.db.dao.FavMovieDao
 import com.nmc.myapplication.db.entity.Cache
-import com.nmc.myapplication.db.entity.FavMovieCache
+import com.nmc.myapplication.db.entity.FavMovie
 
 @Database(
-    entities = [Cache::class, FavMovieCache::class],
+    entities = [Cache::class, FavMovie::class],
     version = 2,
     exportSchema = false
 )

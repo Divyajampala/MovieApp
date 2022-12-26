@@ -1,6 +1,5 @@
 package com.movie.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +14,7 @@ import com.nmc.myapplication.db.dao.CacheDao
 import com.nmc.myapplication.db.dao.DataName
 import com.nmc.myapplication.db.dao.FavMovieDao
 import com.nmc.myapplication.db.entity.Cache
-import com.nmc.myapplication.db.entity.FavMovieCache
+import com.nmc.myapplication.db.entity.FavMovie
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -89,13 +88,13 @@ class MovieViewModel(
 
     fun setFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            favMovieCacheDao.insert(FavMovieCache(id))
+            favMovieCacheDao.insert(FavMovie(id))
         }
     }
 
     fun unsetFavMovieState(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            favMovieCacheDao.delete(FavMovieCache(id))
+            favMovieCacheDao.delete(FavMovie(id))
         }
     }
 

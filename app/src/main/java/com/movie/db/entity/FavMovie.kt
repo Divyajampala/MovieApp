@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class FavMovieCache(
+class FavMovie(
     @PrimaryKey
     @ColumnInfo(name = "id")
     var id: Int

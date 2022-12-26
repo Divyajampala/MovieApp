@@ -9,8 +9,7 @@ class App : Application() {
         DaggerCoreComponent.builder()
             .appModule(AppModule(this))
             .networkModule(NetworkModule())
-            .imageModule(ImageModule())
-            .dispatcherModule(DispatcherModule())
+            .databaseModule(DatabaseModule())
             .build()
     }
 }

@@ -11,9 +11,7 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         NetworkModule::class,
-        DatabaseModule::class,
-        ImageModule::class,
-        DispatcherModule::class]
+        DatabaseModule::class]
 )
 interface CoreComponent {
 
