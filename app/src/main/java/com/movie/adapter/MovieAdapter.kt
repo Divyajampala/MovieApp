@@ -5,9 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.databinding.DataBindingUtil
 import com.movie.databinding.MovieCardViewItemBinding
+import com.movie.model.Genre
 import com.movie.model.Result
 
-class MovieAdapter(var movieList: List<Result>) :
+class MovieAdapter(
+    var movieList: List<Result>,
+    var genreList: List<Genre>,
+    var onClick: (id: Int) -> Unit
+) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(var item: MovieCardViewItemBinding) :
@@ -27,8 +32,13 @@ class MovieAdapter(var movieList: List<Result>) :
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         movieList.get(position).let {
             holder.item.movie = it
-            holder.item.rvGenreList.adapter = it.genre_ids?.map { it.toString() }
+            holder.item.rvGenreList.adapter = it.genre_ids?.flatMap { genreIds ->
+                genreList.filter { genreIds == it.id }
+            }?.mapNotNull { genre -> genre.name }
                 ?.let { list -> GenreAdapter(list) }
+        }
+        holder.item.movieCardItem.setOnClickListener {
+            movieList.get(position).id?.let { id -> onClick.invoke(id) }
         }
     }
 
